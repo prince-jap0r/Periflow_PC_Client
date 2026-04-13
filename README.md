@@ -47,6 +47,7 @@ Perfect for:
         ├─ Touch Input                              ├─ Video Frames (OBS Virtual Camera)
         ├─ Keyboard Events                          ├─ Audio PCM (VB-CABLE)
         └─ Control Commands                         └─ Input Events
+
 ```
 
 ### Communication Protocol
@@ -300,49 +301,166 @@ Output: `dist/Periflow_PC.exe`
 python -m pytest tests/
 ```
 
-### Code Style
+### Code Structure
 
-This project uses:
-- **Black** for code formatting
-- **isort** for import sorting
-- **mypy** for type checking
-
-Run formatting:
-```bash
-black .
-isort .
-mypy periflow
 ```
+Periflow_PC_Client/
+├── periflow/
+│   ├── __init__.py
+│   ├── main.py              # Entry point
+│   ├── config.py            # Settings management
+│   ├── models.py            # Data structures
+│   ├── protocol.py          # Message protocol
+│   ├── server.py            # TCP server
+│   ├── ui.py                # Tkinter UI
+│   ├── system.py            # Windows integration
+│   ├── resources.py         # Asset locator
+│   └── services/
+│       ├── video.py         # Video streaming
+│       ├── audio.py         # Audio streaming
+│       ├── control.py       # Input control
+│       └── _worker.py       # Base worker thread
+├── tests/                   # Unit tests
+├── build_assets/            # UI assets
+├── requirements.txt         # Dependencies
+└── README.md               # This file
+```
+
+### Development Workflow
+
+1. Create a feature branch: `git checkout -b feature/my-feature`
+2. Make changes and test locally: `python main.py`
+3. Run tests: `pytest`
+4. Submit a pull request with a clear description
+
+## 🐛 Troubleshooting
+
+### App Won't Start
+
+- Ensure you have Windows 10 or later
+- Check that Python 3.9+ is installed (if building from source)
+- Look for error messages in the console
+
+### Can't Connect from Android
+
+1. Verify both devices are on **same Wi-Fi network**
+2. Check that PC endpoint is **correct** (shown in Periflow)
+3. Confirm **ports 5000/5001 are open** (firewall may block)
+4. Try disabling Windows Firewall temporarily to test
+5. Check device firewall (third-party antivirus software)
+
+### Audio/Video Not Streaming
+
+- **Video:** Install [OBS Virtual Camera](https://obsproject.com/)
+- **Audio:** Install [VB-CABLE](https://vb-audio.com/Cable/)
+- Configure the devices in audio/video settings
+
+### Firewall Issues
+
+- Run Periflow as Administrator for auto-configuration
+- Manually check Windows Firewall rules:
+  ```powershell
+  netsh advfirewall firewall show rule name="Periflow*"
+  ```
+
+### Performance Issues
+
+- **High CPU:** Reduce resolution or frame rate
+- **Stuttering:** Switch to lower resolution (480p) or lower FPS (15)
+- **Audio latency:** Switch audio transport to UDP
+
+## 📋 Future Roadmap
+
+- [ ] PIN-based secure pairing
+- [ ] Clipboard sharing
+- [ ] File transfer
+- [ ] Multi-client support
+- [ ] iOS app
+- [ ] Web dashboard
+- [ ] VPN tunnel support
+- [ ] End-to-end encryption option
+- [ ] Device sleep/wake control
+- [ ] Screen recording feature
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! To contribute:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Make** your changes with clear commit messages
+4. **Test** thoroughly
+5. **Submit** a Pull Request with description
 
-## 📄 License
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📜 License
 
-## 🙏 Acknowledgments
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-- **OBS Studio** for virtual camera support
-- **VB-Audio** for virtual audio cable
-- **PyInstaller** for creating standalone executables
-- **All contributors** who have helped improve Periflow
+```
+MIT License
 
-## 📞 Support
+Copyright (c) 2024-2026
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+```
+
+## 🙋 Support & FAQ
+
+### Q: Is this safe to use?
+
+**A:** Periflow is designed for trusted local networks only. Do not expose to the internet. It's suitable for home/office environments where all network devices are trusted.
+
+### Q: Can I use this over internet/4G?
+
+**A:** Not recommended. Periflow is built for low-latency local networks. Internet connectivity will cause severe lag and security risks.
+
+### Q: Does it work on Mac/Linux?
+
+**A:** Currently Windows-only. The PC client uses Windows-specific APIs (pynput, ctypes). Mac/Linux ports are possible future enhancements.
+
+### Q: Can multiple phones connect?
+
+**A:** Not in this version. Periflow supports one active client per server instance.
+
+### Q: How do I change ports?
+
+**A:** Edit the settings in the Periflow UI or manually modify `%APPDATA%\Periflow\settings.json`.
+
+### Q: What dependencies are required?
+
+**A:** The .exe bundle includes all dependencies. From source, install `requirements.txt`:
+- opencv-python-headless
+- numpy
+- Pillow
+- PyAudio
+- pynput
+- pyvirtualcam
+
+## 📧 Contact
 
 - **Issues:** [GitHub Issues](https://github.com/yourusername/Periflow_PC_Client/issues)
 - **Discussions:** [GitHub Discussions](https://github.com/yourusername/Periflow_PC_Client/discussions)
-- **Email:** yourusername@example.com
+
+## 🙏 Acknowledgments
+
+- **OBS Project** - Virtual camera streaming
+- **VB-Audio** - Virtual audio cable
+- **pynput** - Cross-platform input simulation
+- Built with ❤️ for the open-source community
 
 ---
 
-<div align="center">
-Made with ❤️ by the Periflow Team
-</div>
+**Made with ❤️ by the Periflow Team**
+
+**Last Updated:** April 2026  
+**Current Version:** 1.0.0
